@@ -19,10 +19,10 @@ char ssid[] = SSID;
 char password[] = PASSWORD;
 
 // TGM
-char BOTtoken[] = TOKEN;
+char token[] = TOKEN;
 
 WiFiClientSecure client;
-UniversalTelegramBot bot(BOTtoken, client);
+UniversalTelegramBot bot(token, client);
 
 int Bot_mtbs = 1000; // time between scan messages
 long Bot_lasttime;   // last time messages' scan has been done
@@ -67,7 +67,49 @@ void loop()
 
 void handleMessage(String text)
 {
-  Serial.println(text);
+  // message fromat: #38338 SUCCESS
+  if (text != NULL && text.startsWith("#") && text.indexOf(" ") > 0)
+  {
+    String buildStatus = text.substring(text.indexOf(" ") + 1, text.length());
+
+    if (buildStatus == "SUCCESS" || buildStatus == "FIXED")
+    {
+      setLightGreen();
+    }
+    else if (buildStatus == "UNSTABLE")
+    {
+      setLightOrange();
+    }
+    else if (buildStatus == "FAILURE")
+    {
+      setLightRed();
+    }
+    else
+    {
+      Serial.println("unknown build status " + text);
+    }
+  }
+}
+
+void setLightGreen()
+{
+  digitalWrite(pinGreen, HIGH);
+  digitalWrite(pinRed, LOW);
+  digitalWrite(pinOrange, LOW);
+}
+
+void setLightOrange()
+{
+  digitalWrite(pinOrange, HIGH);
+  digitalWrite(pinRed, LOW);
+  digitalWrite(pinGreen, LOW);
+}
+
+void setLightRed()
+{
+  digitalWrite(pinRed, HIGH);
+  digitalWrite(pinOrange, LOW);
+  digitalWrite(pinGreen, LOW);
 }
 
 void connectWiFi()
