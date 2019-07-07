@@ -25,7 +25,7 @@ WiFiClientSecure client;
 UniversalTelegramBot bot(token, client);
 
 int Bot_mtbs = 1000; // time between scan messages
-long Bot_lasttime;   // last time messages' scan has been done
+long Bot_lasttime;   // last time messages scan has been done
 
 void setup()
 {
@@ -67,10 +67,11 @@ void loop()
 
 void handleMessage(String text)
 {
-  // message fromat: #38338 SUCCESS
+  // message format: #38338 SUCCESS
   if (text != NULL && text.startsWith("#") && text.indexOf(" ") > 0)
   {
     String buildStatus = text.substring(text.indexOf(" ") + 1, text.length());
+    Serial.println("build status: " + buildStatus);
 
     if (buildStatus == "SUCCESS" || buildStatus == "FIXED")
     {
@@ -126,7 +127,7 @@ void connectWiFi()
   {
     digitalWrite(pinOrange, HIGH);
     Serial.print(".");
-    delay(500);
+    delay(300);
     digitalWrite(pinOrange, LOW);
   }
   Serial.print("connected: ");
