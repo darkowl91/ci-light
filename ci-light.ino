@@ -132,6 +132,8 @@ void connectWiFi()
   }
   Serial.print("connected: ");
   Serial.println(WiFi.localIP());
+  Serial.print("mac address: ");
+  Serial.print(WiFi.macAddress());
 }
 
 void blink()
