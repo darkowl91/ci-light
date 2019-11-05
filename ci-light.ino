@@ -108,7 +108,7 @@ void setLightOrange()
 {
   for (int i = 0; i < NUM_LEDS; i = i + 1)
   {
-    leds[i] = CRGB::Brown;
+    leds[i] = CRGB::Yellow;
     FastLED.show();
     delay(5);
   }
