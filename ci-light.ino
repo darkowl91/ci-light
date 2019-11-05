@@ -3,16 +3,20 @@
  Board Manager: http://arduino.esp8266.com/stable/package_esp8266com_index.json
  Upload speed: 115200
  CPU frequency: 80MHz
+ Platfrom: esp8266 v2.4.2
  */
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 #include <UniversalTelegramBot.h>
+#include <FastLED.h>
 #include "Secrets.h"
 
 // PIN
-const int pinRed = 16;   //D0
-const int pinOrange = 5; //D1
-const int pinGreen = 4;  //D2
+#define DATA_PIN 1 // D1
+
+// LED
+#define NUM_LEDS 150
+CRGB leds[NUM_LEDS];
 
 // WIFI
 char ssid[] = SSID;
@@ -34,10 +38,8 @@ void setup()
   Serial.println();
   Serial.println("Start excecuting setup");
 
-  //setup pins
-  pinMode(pinRed, OUTPUT);
-  pinMode(pinGreen, OUTPUT);
-  pinMode(pinOrange, OUTPUT);
+  //setup leds
+  FastLED.addLeds<WS2812, DATA_PIN, RGB>(leds, NUM_LEDS);
   blink();
 
   //setup wifi
@@ -94,23 +96,32 @@ void handleMessage(String text)
 
 void setLightGreen()
 {
-  digitalWrite(pinGreen, HIGH);
-  digitalWrite(pinRed, LOW);
-  digitalWrite(pinOrange, LOW);
+  for (int i = 0; i < NUM_LEDS; i = i + 1)
+  {
+    leds[i] = CRGB::Red;
+    FastLED.show();
+    delay(5);
+  }
 }
 
 void setLightOrange()
 {
-  digitalWrite(pinOrange, HIGH);
-  digitalWrite(pinRed, LOW);
-  digitalWrite(pinGreen, LOW);
+  for (int i = 0; i < NUM_LEDS; i = i + 1)
+  {
+    leds[i] = CRGB::Brown;
+    FastLED.show();
+    delay(5);
+  }
 }
 
 void setLightRed()
 {
-  digitalWrite(pinRed, HIGH);
-  digitalWrite(pinOrange, LOW);
-  digitalWrite(pinGreen, LOW);
+  for (int i = 0; i < NUM_LEDS; i = i + 1)
+  {
+    leds[i] = CRGB::Green;
+    FastLED.show();
+    delay(5);
+  }
 }
 
 void connectWiFi()
@@ -125,10 +136,8 @@ void connectWiFi()
 
   while (WiFi.status() != WL_CONNECTED)
   {
-    digitalWrite(pinOrange, HIGH);
     Serial.print(".");
     delay(300);
-    digitalWrite(pinOrange, LOW);
   }
   Serial.print("connected: ");
   Serial.println(WiFi.localIP());
@@ -138,15 +147,18 @@ void connectWiFi()
 
 void blink()
 {
-  digitalWrite(pinRed, HIGH);
-  delay(300);
-  digitalWrite(pinRed, LOW);
+  for (int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1)
+  {
+    // Turn our current led on to white, then show the leds
+    leds[whiteLed] = CRGB::White;
 
-  digitalWrite(pinOrange, HIGH);
-  delay(300);
-  digitalWrite(pinOrange, LOW);
+    // Show the leds (only one of which is set to white, from above)
+    FastLED.show();
 
-  digitalWrite(pinGreen, HIGH);
-  delay(300);
-  digitalWrite(pinGreen, LOW);
+    // Wait a little bit
+    delay(5);
+
+    // Turn our current led back to black for the next loop around
+    leds[whiteLed] = CRGB::Black;
+  }
 }
