@@ -100,7 +100,7 @@ void setLightGreen()
   {
     leds[i] = CRGB::Red;
     FastLED.show();
-    delay(5);
+    delay(50);
   }
 }
 
@@ -110,7 +110,7 @@ void setLightOrange()
   {
     leds[i] = CRGB::Yellow;
     FastLED.show();
-    delay(5);
+    delay(50);
   }
 }
 
@@ -120,7 +120,7 @@ void setLightRed()
   {
     leds[i] = CRGB::Green;
     FastLED.show();
-    delay(5);
+    delay(50);
   }
 }
 
