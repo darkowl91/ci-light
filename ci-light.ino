@@ -28,7 +28,7 @@ char token[] = TOKEN;
 WiFiClientSecure client;
 UniversalTelegramBot bot(token, client);
 
-int Bot_mtbs = 1000; // time between scan messages
+int Bot_mtbs = 5000; // time between scan messages
 long Bot_lasttime;   // last time messages scan has been done
 
 void setup()
@@ -44,6 +44,9 @@ void setup()
 
   //setup wifi
   connectWiFi();
+
+  //disable tls
+  client.setInsecure();
 }
 
 void loop()
@@ -142,7 +145,7 @@ void connectWiFi()
   Serial.print("connected: ");
   Serial.println(WiFi.localIP());
   Serial.print("mac address: ");
-  Serial.print(WiFi.macAddress());
+  Serial.println(WiFi.macAddress());
 }
 
 void blink()
