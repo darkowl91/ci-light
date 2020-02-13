@@ -39,7 +39,7 @@ void setup()
   Serial.println("Start excecuting setup");
 
   //setup leds
-  FastLED.addLeds<WS2812, DATA_PIN, RGB>(leds, NUM_LEDS);
+  FastLED.addLeds<WS2812, DATA_PIN, GRB>(leds, NUM_LEDS);
   blink();
 
   //setup wifi
@@ -80,15 +80,15 @@ void handleMessage(String text)
 
     if (buildStatus == "SUCCESS" || buildStatus == "FIXED")
     {
-      setLightGreen();
+      setLight(CRGB::Green);
     }
     else if (buildStatus == "UNSTABLE")
     {
-      setLightOrange();
+      setLight(CRGB::Orange);
     }
     else if (buildStatus == "FAILURE")
     {
-      setLightRed();
+      setLight(CRGB::Red);
     }
     else
     {
@@ -97,31 +97,11 @@ void handleMessage(String text)
   }
 }
 
-void setLightGreen()
+void setLight(CRGB color)
 {
   for (int i = 0; i < NUM_LEDS; i = i + 1)
   {
-    leds[i] = CRGB::Red;
-    FastLED.show();
-    delay(50);
-  }
-}
-
-void setLightOrange()
-{
-  for (int i = 0; i < NUM_LEDS; i = i + 1)
-  {
-    leds[i] = CRGB::Yellow;
-    FastLED.show();
-    delay(50);
-  }
-}
-
-void setLightRed()
-{
-  for (int i = 0; i < NUM_LEDS; i = i + 1)
-  {
-    leds[i] = CRGB::Green;
+    leds[i] = color;
     FastLED.show();
     delay(50);
   }
